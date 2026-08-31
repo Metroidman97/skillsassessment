@@ -146,6 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points: []
   lap: 0
+  isRacing: 0
 --- !u!54 &7903394566092022693
 Rigidbody:
   m_ObjectHideFlags: 0
