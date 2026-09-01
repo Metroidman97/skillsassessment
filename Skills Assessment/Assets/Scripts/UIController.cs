@@ -13,9 +13,13 @@ public class UIController : MonoBehaviour
     public GameObject raceText;
     public GameObject toRaceText;
     public GameObject backText;
+    public GameObject toCannonText;
+    public GameObject cannonText;
 
     public Camera mainCamera;
     private RaceManager raceManager;
+
+    private Cannon cannon;
 
     private Vector3 cameraStartPosition =  new Vector3(0, 1, -10);
     private Quaternion cameraStartRotation = Quaternion.identity;
@@ -23,10 +27,14 @@ public class UIController : MonoBehaviour
     private Vector3 cameraRaceposition = new Vector3(-6.43f, -25.7f, 66.6f);
     private Quaternion cameraRaceRotation = Quaternion.Euler(34.7f, 0, 0);
 
+    private Vector3 cameraCannonPosition = new Vector3(0, 20f, 30f);
+    private Quaternion cameraCannonRotation = Quaternion.Euler(-30f, 0, 0);
+
     private enum demoState
     {
         None,
-        Race
+        Race,
+        Cannon
     }
 
     private demoState currentState;
@@ -35,12 +43,14 @@ public class UIController : MonoBehaviour
     void Start()
     {
         raceManager = GameObject.Find("RaceManager").GetComponent<RaceManager>();
+        cannon = GameObject.Find("Cannon").GetComponent<Cannon>();
 
         // Set the text to inactive at the start
         nameText.SetActive(false);
         objectivesText.SetActive(false);
         raceText.SetActive(false);
         backText.SetActive(false);
+        cannonText.SetActive(false);
 
         currentState = demoState.None;
 
@@ -80,7 +90,20 @@ public class UIController : MonoBehaviour
                 currentState = demoState.Race;
                 raceText.SetActive(true);
                 toRaceText.SetActive(false);
+                toCannonText.SetActive(false);
                 backText.SetActive(true);
+            }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                mainCamera.transform.position = cameraCannonPosition;
+                mainCamera.transform.rotation = cameraCannonRotation;
+                currentState = demoState.Cannon;
+                toRaceText.SetActive(false);
+                toCannonText.SetActive(false);
+                backText.SetActive(true);
+                cannonText.SetActive(true);
+                cannon.StartMissileDemo();
             }
         }
 
@@ -97,6 +120,14 @@ public class UIController : MonoBehaviour
             }
         }
 
+        if (currentState == demoState.Cannon)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                cannon.Fire();
+            }
+        }
+
         if (currentState != demoState.None)
         {
             if (Input.GetKeyDown(KeyCode.B))
@@ -107,8 +138,16 @@ public class UIController : MonoBehaviour
                 raceText.SetActive(false);
                 backText.SetActive(false);
                 toRaceText.SetActive(true);
+                toCannonText.SetActive(true);
+                cannonText.SetActive(false);
                 raceManager.ResetRace();
+                cannon.ResetMissileDemo();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
     }
 }

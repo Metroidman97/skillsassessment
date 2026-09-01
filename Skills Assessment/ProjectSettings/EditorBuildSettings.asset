@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SkillsAssessment.unity
+    guid: 42733b6b0a36acb46a15a48efd4552ca
   m_configObjects: {}
